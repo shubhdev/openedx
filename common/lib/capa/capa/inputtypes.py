@@ -753,6 +753,7 @@ class CodeInput(InputTypeBase):
 
             # For CodeMirror
             Attribute('mode', 'python'),
+            Attribute('readonly',''),
             Attribute('linenumbers', 'true'),
             # Template expects tabsize to be an int it can do math with
             Attribute('tabsize', 4, transform=int),

@@ -1,3 +1,4 @@
+
 class @Problem
 
   constructor: (element) ->
@@ -5,7 +6,8 @@ class @Problem
     @id = @el.data('problem-id')
     @element_id = @el.attr('id')
     @url = @el.data('url')
-
+    @lang_choice = ''
+    @editors = []
     # has_timed_out and has_response are used to ensure that are used to
     # ensure that we wait a minimum of ~ 1s before transitioning the check
     # button from disabled to enabled
@@ -21,7 +23,55 @@ class @Problem
     if MathJax?
       @el.find('.problem > div').each (index, element) =>
         MathJax.Hub.Queue ["Typeset", MathJax.Hub, element]
+    #syntax highlighting all text inside <div class="code-snippet" data-mode="<mode>"></div> . NOT a binding but this will remain here until I find a suitable place
+    #changeby: Shubham Rawat
+    #source: http://stackoverflow.com/questions/5521137/codemirror-2-highlight-only-no-editor
+    `this.$('.code-snippet').each(function(){
+	var $this = _this.$(this),
+	$mode = $this.attr('data-mode');
+        var $code = $this.html(),
+        $unescaped = _this.$('<div/>').html($code).text();
+   
+        $this.empty();
 
+        CodeMirror(this, {
+           value: $unescaped,
+           mode: $mode,
+           lineNumbers: true,
+           readOnly: 'nocursor'
+         });
+	});
+	var lang_select = this.$('select.lang-options');
+	// set the language if stored in localstorage
+	if(window.localStorage){
+	 // alert('have it');
+	  var $get = window.localStorage.getItem('cm_lang_choice');
+          if($get){lang_select.val($get);}
+    }
+  
+	lang_select.change(function(){
+	//alert('set');
+	var value = _this.$(this).find('option:selected').text(),
+	    $mode =  _this.$(this).val();
+	_this.lang_choice =  $mode;
+	if(window.localStorage){
+	  window.localStorage.setItem('cm_lang_choice',$mode);
+	}
+	_this.$('.code-stub').each(function(index) {
+	 if( _this.$(this).attr('id') == value){_this.$(this).show();}
+           else {_this.$(this).hide();}
+        });
+	if(window.cmeditor){
+	  window.cmeditor.setOption('mode',$mode);
+	}else{
+	  alert('cmeditor is set afterwards, cool he will get the lang from _this.lang_choice');
+	}
+	
+    }).trigger('change');
+    //currently in codeinput.html the grader response comes immediately after the textbox,we use some javascript to swap it with the div which 
+    //will contain the last code-stub, with id as "last-code-stub"
+    this.$('.grader-response').insertAfter('#last-code-stub'); 
+    `
     window.update_schematics()
 
     problem_prefix = @element_id.replace(/problem_/,'')
@@ -307,7 +357,8 @@ class @Problem
     timeout_id = @enableCheckButtonAfterTimeout()
 
     Logger.log 'problem_check', @answers
-
+    console.log @answers
+    alert @url
     $.postWithPrefix("#{@url}/problem_check", @answers, (response) =>
       switch response.success
         when 'incorrect', 'correct'
@@ -539,14 +590,18 @@ class @Problem
     cminput: (container) =>
       element = $(container).find("textarea")
       tabsize = element.data("tabsize")
-      mode = element.data("mode")
+      mode = @lang_choice
+      if mode == ''
+          mode = element.data("mode")
       linenumbers = element.data("linenums")
+      readOnly = element.data("readonly")
       spaces = Array(parseInt(tabsize) + 1).join(" ")
-      CodeMirror.fromTextArea element[0], {
+      window.cmeditor = CodeMirror.fromTextArea element[0], {
           lineNumbers: linenumbers
           indentUnit: tabsize
           tabSize: tabsize
           mode: mode
+          readOnly: readOnly
           matchBrackets: true
           lineWrapping: true
           indentWithTabs: false

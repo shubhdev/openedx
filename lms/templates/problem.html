@@ -1,6 +1,8 @@
 <%! from django.utils.translation import ugettext as _ %>
 
 <%namespace name='static' file='static_content.html'/>
+<!link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
 <h2 class="problem-header">
   ${ problem['name'] }
 </h2>
@@ -15,7 +17,7 @@
     <input type="hidden" name="problem_id" value="${ problem['name'] }" />
 
     % if check_button:
-    <button class="check ${ check_button }" data-checking="${ check_button_checking }" data-value="${ check_button }"><span class="check-label">${ check_button }</span><span class="sr"> ${_("your answer")}</span></button>
+    <button class="check ${ check_button }" data-checking="${ check_button_checking }" data-value="${ check_button }"><span class="check-label"><i class="fa fa-check"> ${ check_button }</i></span><span class="sr"> ${_("your answer")}</span></button>
     % endif
     % if reset_button:
     <button class="reset" data-value="${_('Reset')}">${_('Reset')}<span class="sr"> ${_("your answer")}</span></button>
