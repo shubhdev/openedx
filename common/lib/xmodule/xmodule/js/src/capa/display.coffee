@@ -6,8 +6,6 @@ class @Problem
     @id = @el.data('problem-id')
     @element_id = @el.attr('id')
     @url = @el.data('url')
-    @lang_choice = ''
-    @editors = []
     # has_timed_out and has_response are used to ensure that are used to
     # ensure that we wait a minimum of ~ 1s before transitioning the check
     # button from disabled to enabled
@@ -54,6 +52,7 @@ class @Problem
 	var value = _this.$(this).find('option:selected').text(),
 	    $mode =  _this.$(this).val();
 	_this.lang_choice =  $mode;
+    //alert(_this.lang_choice);
 	if(window.localStorage){
 	  window.localStorage.setItem('cm_lang_choice',$mode);
 	}
@@ -64,7 +63,7 @@ class @Problem
 	if(window.cmeditor){
 	  window.cmeditor.setOption('mode',$mode);
 	}else{
-	  alert('cmeditor is set afterwards, cool he will get the lang from _this.lang_choice');
+	  console.log('cmeditor is set afterwards, cool he will get the lang from _this.lang_choice');
 	}
 	
     }).trigger('change');
@@ -588,11 +587,10 @@ class @Problem
       return display
 
     cminput: (container) =>
+      alert container
       element = $(container).find("textarea")
       tabsize = element.data("tabsize")
-      mode = @lang_choice
-      if mode == ''
-          mode = element.data("mode")
+      mode = element.data("mode")
       linenumbers = element.data("linenums")
       readOnly = element.data("readonly")
       spaces = Array(parseInt(tabsize) + 1).join(" ")
