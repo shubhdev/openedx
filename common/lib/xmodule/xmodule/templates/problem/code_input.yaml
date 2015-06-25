@@ -19,6 +19,7 @@ data: |
         <option value="text/x-c++src">c++</option>
         <option value="python">python</option>
       </select>
+      <span></span>
       <coderesponse queuename="cpp-queue">
         <textbox mode="text/x-c++src" tabsize="4" />
         <codeparam>
