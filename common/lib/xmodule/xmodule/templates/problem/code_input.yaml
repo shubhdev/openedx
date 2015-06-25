@@ -9,7 +9,7 @@ data: |
         <p>
           This is a sample coding problem. Write a program to print "Hello,World!".
         </p>
-        <h1>Output</b></h1>
+        <h1><b>Output</b></h1>
         <p>
           Print "Hello,World!" (without the quotes).
         </p>
