@@ -1,10 +1,10 @@
 ---
 metadata:
-    display_name: Coding Problems
+    display_name: Custom Python-Evaluated Input
     markdown: !!null
 data: |
       <problem>
-      <p>
+      <p>    
       In custom Python-evaluated input (also called "write-your-own-grader"
       problems), the grader uses a Python script that you create and embed in
       the problem to evaluate a learner's response or provide hints. These

@@ -8,6 +8,10 @@ define(["js/models/component_template"],
                         "category": "problem",
                         "boilerplate_name": "formularesponse.yaml",
                         "display_name": "Math Expression Input"
+                    },{
+                        "category":"problem"
+                        "boilerplate_name": null
+                        "display_name" : "BOBO WE DID IT"
                     }, {
                         "category": "problem",
                         "boilerplate_name": null,
