@@ -3,7 +3,7 @@ metadata:
     display_name: Coding Problem
     markdown: !!null
 data: |
-      <problem display_name="Hello, World!">
+      <problem>
       <text>
         <h1><b>Statement</b></h1>
         <p>
