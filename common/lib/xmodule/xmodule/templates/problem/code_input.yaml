@@ -1,0 +1,38 @@
+---
+metadata:
+    display_name: Coding Problem
+    markdown: !!null
+data: |
+      <problem display_name="Hello, World!">
+      <text>
+        <h1><b>Statement</b></h1>
+        <p>
+          This is a sample coding problem. Write a program to print "Hello,World!".
+        </p>
+        <h1>Output</b></h1>
+        <p>
+          Print "Hello,World!" (without the quotes).
+        </p>
+      </text>
+      <select class="lang-options" style="margin-left:90%">
+        <option value="text/x-java">java</option>
+        <option value="text/x-c++src">c++</option>
+        <option value="python">python</option>
+      </select>
+      <coderesponse queuename="cpp-queue">
+        <textbox mode="text/x-c++src" tabsize="4" />
+        <codeparam>
+          <initial_display><![CDATA[ 
+
+          ]]> 
+          </initial_display>
+          <grader_payload>
+            {
+              "problem_type": "Check",
+              "grader"      : "http://example.domain/problemid_check.py"
+            }
+        </grader_payload>
+        </codeparam>
+      </coderesponse>
+      </problem>
+
