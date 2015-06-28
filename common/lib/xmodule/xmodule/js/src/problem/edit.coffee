@@ -44,6 +44,83 @@ class @MarkdownEditingDescriptor extends XModule.Descriptor
     $(@xml_editor.getWrapperElement()).toggleClass("CodeMirror-advanced");
     # Need to refresh to get line numbers to display properly.
     @xml_editor.refresh()
+    #alert "here i can tell them to insert a button"
+    ###
+    ChangeBy: edxOnBaadal
+    This code is to add a button to enable form input in Coding Problems. This is a hack,until we find a better solution.
+    AFAIK in the editor, we have no way of telling the problem type, except for the XML code of the problem.
+    So I will search the xml box using jquery and if a particular tag(specific to coding problem)is found, then the button will be shown.
+
+    Tag currently used to decide if coding problem : coderesponse
+    NOTE: This might change in future depending on current edx version,update the variable target_tag in the below code in that case.
+    SOURCE: http://edx-partner-course-staff.readthedocs.org/en/latest/exercises_tools/external_graders.html#create-a-code-response-problem
+    ###
+    target_tag =  ///
+                  <                 #should have opening bracket
+                  \s*               #allow for spaces after that
+                  /?                #</coderesponse> or <coderesponse>
+                  \s*
+                  coderesponse      # change this incase the tag name changes
+                  (>| [^<\n]*>)     # <coderesponse> or <coderesponse {any_string}> but not <coderesponse{any_string}>
+                  ///
+    problem_xml = @xml_editor.getValue()
+    if target_tag.test problem_xml
+      @enableFormInput()
+  
+  ###
+  The problem has been decided as a coding type, and we will now insert a button  and a form 
+  The button will be inserted besides the 'Save' button
+  ###
+  enableFormInput: () =>
+    #wrapper 'li' tag of save button
+    save_button_wrapper_li = $('a.action-save').closest('li')
+    console.log save_button_wrapper_li
+    #insert the button by duplicating the 'Save' button
+    copy = save_button_wrapper_li.clone().insertBefore(save_button_wrapper_li)
+    console.log copy
+    copy.find('a').text('Create using form').removeClass('action-save')
+    #Create a form
+    form = 
+    '
+      <div id="problem-form" style="background-color:#fff;z-index:1;display:none">
+        whats on your mind??:
+          <textarea type="text" rows="4" cols="50" name="statement">
+          </textarea>
+          Name:
+          <input type="text" name="name"/>
+          Age:
+          <input type="text" name="age"/>
+          Height:
+          <input type="text" name="height"/>
+          <div id = "buttons">
+            <button id="submit">Submit</button>
+            <button id = "close">Close</button>
+          </div>
+      </div>
+    '
+    #popup = $(form).insertAfter($('div > div.modal-window.modal-editor.confirm.modal-lg.modal-type-problem'))
+    popup = $(form).appendTo($('div.modal-window.modal-editor.confirm.modal-lg.modal-type-problem'))
+    copy.click () =>
+      popup.find($('button#submit')).click () =>
+        inputs = $(':input, textarea',popup)
+        values = {}
+        inputs.each () ->
+          values[this.name] = $(this).val();
+        @xml_editor.setValue("<b>hi, "+values["age"]+" years old "+values["name"]+", "+values["height"]+" cm Long says "+values["statement"]+"</b>")
+        popup.hide()
+      popup.find($('button#close')).click () ->
+        popup.hide() 
+      popup.css {
+        'background-color': '#fff';
+        'position': 'absolute';
+        'width': '100%';
+        'height': '100%';
+        'top': '0px';
+        'left': '0px';
+        'z-index': 1000;
+      }
+      popup.show()
+
 
   ###
   User has clicked to show the XML editor. Before XML editor is swapped in,

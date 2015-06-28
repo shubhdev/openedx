@@ -64,7 +64,9 @@ h1 {
   @include box-sizing(border-box);
   width: 100%;
 }
-
+#problem-form{
+  background-color: #777;
+}
 // +Typography - Basic
 // ==================== 
 .page-header {
