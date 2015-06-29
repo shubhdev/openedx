@@ -1958,7 +1958,11 @@ class CodeResponse(LoncapaResponse):
         _ = self.capa_system.i18n.ugettext
         try:
             # Note that submission can be a file
-            submission = student_answers[self.answer_id]
+            submission      = student_answers[self.answer_id]
+            code_stub_start = student_answers['stub_start']
+            code_stub_end   = student_answers['stub_end']
+            submission_lang = student_answers['submission_lang']
+            log.info('Yo! Did you pass %s ?',submission_lang)
         except Exception as err:
             log.error(
                 'Error in CodeResponse %s: cannot get student answer for %s;'
@@ -1998,7 +2002,7 @@ class CodeResponse(LoncapaResponse):
             # TODO: Get S3 pointer from the Queue
             self.context.update({'submission': ''})
         else:
-            self.context.update({'submission': submission})
+            self.context.update({'submission': code_stub_start+submission+code_stub_end})
 
         contents = self.payload.copy()
 
@@ -2009,7 +2013,7 @@ class CodeResponse(LoncapaResponse):
             'submission_time': qtime,
         }
         contents.update({'student_info': json.dumps(student_info)})
-
+        contents.update({'submission_lang': submission_lang})
         # Submit request. When successful, 'msg' is the prior length of the
         # queue
 
@@ -2020,7 +2024,7 @@ class CodeResponse(LoncapaResponse):
                                                     body=json.dumps(contents),
                                                     files_to_upload=submission)
         else:
-            contents.update({'student_response': submission})
+            contents.update({'student_response': code_stub_start+submission+code_stub_end})
             (error, msg) = qinterface.send_to_queue(header=xheader,
                                                     body=json.dumps(contents))
 

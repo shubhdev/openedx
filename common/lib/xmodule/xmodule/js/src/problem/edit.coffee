@@ -98,8 +98,109 @@ class @MarkdownEditingDescriptor extends XModule.Descriptor
           </div>
       </div>
     '
+    form = 
+    ' <div id="statement-inputs">
+      </div>
+      <div id="language-options" style="display:none">
+      </div>
+      <div id="initial-text" style="display:none">
+      </div>
+    '
     #popup = $(form).insertAfter($('div > div.modal-window.modal-editor.confirm.modal-lg.modal-type-problem'))
     popup = $(form).appendTo($('div.modal-window.modal-editor.confirm.modal-lg.modal-type-problem'))
+
+    languages = [
+            {name:'c++',mode:'text/x-c++src'},
+            {name:'java',mode:'text/x-java'},
+            {name:'python',mode:'python'}
+           ]
+    segments = [
+          'Statement',
+          'Input',
+          'Output',
+          'Example',
+          'Constraints'
+    ]
+    
+    render = ->
+      probSegs = '<ul>'
+      
+      for segment in segments
+        probSegs += '<li><label>' + segment + '</label> <textarea id="' + segment + '-text"></textarea></li>'
+      probSegs += '</ul><button onclick="langSelect()" >Next</button>'
+      $('#statement-inputs',popup).html probSegs
+      checkboxes = '<ul>'
+      
+      for language in languages
+        checkboxes += "<li><label>"+language.name+'</label>
+              <input type="checkbox" id="'+language.name+'-select"/>
+            </li>';
+      checkboxes += '</ul><label>Is code-snippet</label>\
+          <input type="checkbox" id="isCodeSnippet" onclick="(function(){if(document.getElementById("isCodeSnippet").checked)
+            hideShow("Submit-button","Next-button");
+            else
+            hideShow("Next-button","Submit-button");})();"/>
+          <button onclick="hideShow("language-options","statement-inputs");" >Back</button>
+          <button id="Next-button" onclick="initTextSec()" style="display:none" >Next</button>
+          <button id="Submit-button" onclick="parse();" style="display:block" >Submit</button>
+          '
+      $('#language-options',popup).html checkboxes
+      finHTML = '<select id="lang-select" onchange="switchTextBox()"></select>'
+      for language in languages
+        textboxes = '<textarea id="'+language.name+'-txt1"></textarea>
+                <textarea id="'+language.name+'-txt3"></textarea>'
+        finHTML += '<div id="'+language.name+'-txt" style="display:none">'+textboxes+'</div>'
+      finHTML+='<button onclick="hideShow("initial-text","language-options");" >Back</button>
+          <button onclick="hideShow("initial-text","xml-output");parse();" >Submit</button>';
+      $("#initial-text",popup).html finHTML
+    
+    render()
+
+    hideShow = (hideId,showId)->
+      $("##{hideId}",popup).hide()
+      $("##{showId}",popup).show()
+
+    langSelect = ->
+      hideShow 'statement-inputs','language-options'
+    initTextSec = ->
+      isFirst = true
+      insrtHTML = ''
+      for language in languages
+        $("##{language.name}-txt",popup).hide()
+        if $("##{language.name}-select",popup)[0].checked
+          if isFirst
+            $("##{language.name}-txt",popup).show()
+            isFirst = false
+            curLang = language.name+'-txt'
+          $("##{language.name}-txt1",popup).show()
+          $("##{language.name}-txt3",popup).show()
+          insrtHTML += '<option id="'+language.name+'-option" value="'+language.name+'-txt">'+language.name+'</option>'
+      $('#lang-select').html insrtHTML
+      hideShow 'language-options','initial-text'
+    switchTextBox = ->
+      newLang = $('#lang-select',popup).val()
+      hideShow curLang,newLang
+      curLang = newLang
+
+    $('',popup).click ()->
+      switchTextBox()
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     copy.click () =>
       popup.find($('button#submit')).click () =>
         inputs = $(':input, textarea',popup)
@@ -210,7 +311,7 @@ class @MarkdownEditingDescriptor extends XModule.Descriptor
         {
             data: MarkdownEditingDescriptor.markdownToXml(@markdown_editor.getValue())
             metadata:
-            	markdown: @markdown_editor.getValue()
+              markdown: @markdown_editor.getValue()
         }
     else
        {

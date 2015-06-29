@@ -6,7 +6,6 @@ class @Problem
     @id = @el.data('problem-id')
     @element_id = @el.attr('id')
     @url = @el.data('url')
-    @lang_choice = ''
     # has_timed_out and has_response are used to ensure that are used to
     # ensure that we wait a minimum of ~ 1s before transitioning the check
     # button from disabled to enabled
@@ -33,12 +32,12 @@ class @Problem
    
         $this.empty();
 
-        CodeMirror(this, {
+        $this.data('cminstance',CodeMirror(this, {
            value: $unescaped,
            mode: $mode,
            lineNumbers: true,
            readOnly: 'nocursor'
-         });
+         }));
 	});
 	var lang_select = this.$('select.lang-options');
 	// set the language if stored in localstorage
@@ -49,17 +48,28 @@ class @Problem
     }
   
 	lang_select.change(function(){
+    _this.start_stub = '';
+    _this.end_stub = '';
 	//alert('set');
 	var value = _this.$(this).find('option:selected').text(),
 	    $mode =  _this.$(this).val();
-	_this.lang_choice =  $mode;
+	_this.lang_choice =  value;
 	if(window.localStorage){
 	  window.localStorage.setItem('cm_lang_choice',$mode);
 	}
 	_this.$('.code-stub').each(function(index) {
-	 if( _this.$(this).attr('id') == value){_this.$(this).show();}
-           else {_this.$(this).hide();}
-        });
+    if( _this.$(this).attr('id') == value){
+      
+      if (_this.$(this).parent().attr('id') == 'last-code-stub'){
+        _this.end_stub += _this.$(this).data('cminstance').getValue();
+      }
+      else{
+        _this.start_stub += _this.$(this).data('cminstance').getValue();
+      }
+      _this.$(this).show();
+    }
+    else {_this.$(this).hide();}
+  });
 	if(window.cmeditor){
 	  window.cmeditor.setOption('mode',$mode);
 	}else{
@@ -356,10 +366,10 @@ class @Problem
     @enableCheckButton false
 
     timeout_id = @enableCheckButtonAfterTimeout()
-
     Logger.log 'problem_check', @answers
     console.log @answers
-    alert @url
+    #alert @url
+
     $.postWithPrefix("#{@url}/problem_check", @answers, (response) =>
       switch response.success
         when 'incorrect', 'correct'
@@ -373,7 +383,7 @@ class @Problem
           @gentle_alert response.success
       Logger.log 'problem_graded', [@answers, response.contents], @id
     ).always(@enableCheckButtonAfterResponse)
-
+  
   reset: =>
     Logger.log 'problem_reset', @answers
     $.postWithPrefix "#{@url}/problem_reset", id: @id, (response) =>
@@ -498,7 +508,21 @@ class @Problem
       element.schematic.update_value()
     @$(".CodeMirror").each (index, element) ->
       element.CodeMirror.save() if element.CodeMirror.save
-    @answers = @inputs.serialize()
+    ###
+    ChangeBy: edxOnBaadal
+    In coding problems with code stubs, the answer sent to the grader will consist only of the value in the text box,we need to change that.
+    So, we will prepend and append the code in code stubs 'before' and 'after', to the value in the text box and send that to the graders.
+    ###
+    if @lang_choice                   #langchoice is set if and only if this is a coding problem
+      #we are assured that the there will be only one textarea, lets add the start and end stubs to it
+      encoded_start_stub = encodeURIComponent @start_stub
+      encoded_end_stub = encodeURIComponent @end_stub
+      encoded_submission_lang = encodeURIComponent @lang_choice
+      #@inputs.val(@start_stub+original_data+@end_stub)
+      @answers = @inputs.serialize()+"&code_stub_start=#{encoded_start_stub}&code_stub_end=#{encoded_end_stub}&code_submission_lang=#{encoded_submission_lang}"
+      #@inputs.val(original_data)
+    else
+      @answers = @inputs.serialize()
 
   bindResetCorrectness: ->
     # Loop through all input types
