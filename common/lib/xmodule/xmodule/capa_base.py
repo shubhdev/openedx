@@ -99,6 +99,15 @@ class CapaFields(object):
         help=_("Number of attempts taken by the student on this problem"),
         default=0,
         scope=Scope.user_state)
+    trial_runs = Integer(
+        help=_("Number of trial attempts taken by the student"),
+        default=0,
+        scope=Scope.user_state)
+    allow_trial_attempts = Boolean(
+        display_name=_("Allow Trial Runs"),
+        help=_("Valid only for coding problems.Allow trial runs for this problem.Trial runs do not count as a submission."),
+        default=True,
+        scope=Scope.settings)
     max_attempts = Integer(
         display_name=_("Maximum Attempts"),
         help=_("Defines the number of times a student can try to answer this problem. "
@@ -611,10 +620,14 @@ class CapaMixin(CapaFields):
         if self.should_show_check_button():
             check_button = self.check_button_name()
             check_button_checking = self.check_button_checking_name()
+            if self.allow_trial_attempts:
+                trial_run = _("Test")
+            else:
+                trial_run = False
         else:
             check_button = False
             check_button_checking = False
-
+            trial_run = False
         content = {
             'name': self.display_name_with_default,
             'html': html,
@@ -631,6 +644,7 @@ class CapaMixin(CapaFields):
             'answer_available': self.answer_available(),
             'attempts_used': self.attempts,
             'attempts_allowed': self.max_attempts,
+            'trial_run' : trial_run
         }
 
         html = self.runtime.render_template('problem.html', context)
@@ -941,7 +955,9 @@ class CapaMixin(CapaFields):
         answers = self.make_dict_of_responses(data)
         answers_without_files = convert_files_to_filenames(answers)
         event_info['answers'] = answers_without_files
-
+        #edxOnBaadal
+        is_trial_run = answers['trial']
+        event_info['trial_run'] = is_trial_run
         metric_name = u'capa.check_problem.{}'.format
         # Can override current time
         current_time = datetime.datetime.now(UTC())
@@ -993,10 +1009,16 @@ class CapaMixin(CapaFields):
 
         try:
             correct_map = self.lcp.grade_answers(answers)
-            self.attempts = self.attempts + 1
-            self.lcp.done = True
-            self.set_state_from_lcp()
-            self.set_last_submission_time()
+            #edxOnBaadal
+            if (not is_trial_run):
+                self.attempts = self.attempts + 1
+                self.lcp.done = True
+                self.set_state_from_lcp()
+                self.set_last_submission_time()
+            else:
+                self.trial_runs = self.trial_runs + 1
+                self.set_state_from_lcp()
+                self.set_last_submission_time()
 
         except (StudentInputError, ResponseError, LoncapaProblemError) as inst:
             log.warning("StudentInputError in capa_module:problem_check",
@@ -1029,7 +1051,8 @@ class CapaMixin(CapaFields):
                 return {'success': msg}
             raise
 
-        published_grade = self.publish_grade()
+        if(not is_trial_run):
+            published_grade = self.publish_grade()
 
         # success = correct if ALL questions in this problem are correct
         success = 'correct'
@@ -1039,15 +1062,17 @@ class CapaMixin(CapaFields):
 
         # NOTE: We are logging both full grading and queued-grading submissions. In the latter,
         #       'success' will always be incorrect
-        event_info['grade'] = published_grade['grade']
-        event_info['max_grade'] = published_grade['max_grade']
+        if(not is_trial_run):
+            event_info['grade'] = published_grade['grade']
+            event_info['max_grade'] = published_grade['max_grade']
         event_info['correct_map'] = correct_map.get_dict()
         event_info['success'] = success
         event_info['attempts'] = self.attempts
+        event_info['trial_runs'] = self.trial_runs
         event_info['submission'] = self.get_submission_metadata_safe(answers_without_files, correct_map)
         self.track_function_unmask('problem_check', event_info)
 
-        if dog_stats_api:
+        if (not (is_trial_run) and dog_stats_api):
             dog_stats_api.increment(metric_name('checks'), tags=[u'result:success'])
             dog_stats_api.histogram(
                 metric_name('correct_pct'),
@@ -1057,7 +1082,7 @@ class CapaMixin(CapaFields):
                 metric_name('attempts'),
                 self.attempts,
             )
-
+        #edxOnBaadal: not sure what to do with this??
         if hasattr(self.runtime, 'psychometrics_handler'):  # update PsychometricsData using callback
             self.runtime.psychometrics_handler(self.get_state_for_lcp())
 

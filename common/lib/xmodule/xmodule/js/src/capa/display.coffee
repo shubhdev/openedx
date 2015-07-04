@@ -92,7 +92,13 @@ class @Problem
     @checkButtonLabel = @$('div.action button.check span.check-label')
     @checkButtonCheckText = @checkButtonLabel.text()
     @checkButtonCheckingText = @checkButton.data('checking')
-    @checkButton.click @check_fd
+    @checkButton.click (=> 
+      @check_fd(false)
+      return
+    )
+    @$('div.action button.trial').click(=>
+      @check_fd(true)
+    )
     @$('div.action button.reset').click @reset
     @$('div.action button.show').click @show
     @$('div.action button.save').click @save
@@ -274,11 +280,17 @@ class @Problem
   #
   # NOTE: The dispatch 'problem_check' is being singled out for the use of FormData;
   #       maybe preferable to consolidate all dispatches to use FormData
+  # ChangeBy: edxOnBaadal
+  # added a bool as arguement 'is_trial_run'
+  # specifies if this submission should count towards the grades,score,progress.... and other various metrics. basically added for coding type problems
+  # to allow for testing code on sample cases without submitting it.
+  # NOTE: not sure if currently works for file submission, TODO
+  # Works by passing the bool to capa_base.py in the same POST request
   ###
-  check_fd: =>
+  check_fd: (is_trial_run)=>
     # If there are no file inputs in the problem, we can fall back on @check
     if @el.find('input:file').length == 0
-      @check()
+      @check(is_trial_run)
       return
 
     @enableCheckButton false
@@ -291,7 +303,7 @@ class @Problem
     timeout_id = @enableCheckButtonAfterTimeout()
 
     fd = new FormData()
-
+    fd.append('is_trial',is_trial_run)
     # Sanity checks on submission
     max_filesize = 4*1000*1000 # 4 MB
     file_too_large = false
@@ -358,15 +370,16 @@ class @Problem
 
     $.ajaxWithPrefix("#{@url}/problem_check", settings)
 
-  check: =>
+  check: (is_trial_run)=>
     if not @check_save_waitfor(@check_internal)
-      @check_internal()
+      @check_internal(is_trial_run)
 
-  check_internal: =>
+  check_internal: (is_trial_run)=>
     @enableCheckButton false
 
     timeout_id = @enableCheckButtonAfterTimeout()
     Logger.log 'problem_check', @answers
+    @answers += "&is_trial=#{is_trial_run}"
     console.log @answers
     #alert @url
 

@@ -19,6 +19,9 @@
     % if check_button:
     <button class="check ${ check_button }" data-checking="${ check_button_checking }" data-value="${ check_button }"><span class="check-label"><i class="fa fa-check"> ${ check_button }</i></span><span class="sr"> ${_("your answer")}</span></button>
     % endif
+    %if trial_run:
+    <button class="trial" data-value="${ trial_run }">${trial_run}<span class="sr"> ${_("your answer on sample input")}</span></button>
+    % endif
     % if reset_button:
     <button class="reset" data-value="${_('Reset')}">${_('Reset')}<span class="sr"> ${_("your answer")}</span></button>
     % endif
