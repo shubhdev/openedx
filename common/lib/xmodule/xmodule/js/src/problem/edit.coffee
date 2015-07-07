@@ -98,184 +98,173 @@ class @MarkdownEditingDescriptor extends XModule.Descriptor
           </div>
       </div>
     '
-    #     form = 
-    # ' <div id="statement-inputs">
-    #   </div>
-    #   <div id="language-options" style="display:none">
-    #   </div>
-    #   <div id="initial-text" style="display:none">
-    #   </div>
-    # '
-    # #popup = $(form).insertAfter($('div > div.modal-window.modal-editor.confirm.modal-lg.modal-type-problem'))
-    # popup = $(form).appendTo($('div.modal-window.modal-editor.confirm.modal-lg.modal-type-problem'))
+    form = 
+    ' <div id="statement-inputs">
+      </div>
+      <div id="language-options" style="display:none">
+      </div>
+      <div id="initial-text" style="display:none">
+      </div>
+    '
+    #popup = $(form).insertAfter($('div > div.modal-window.modal-editor.confirm.modal-lg.modal-type-problem'))
+    popup = $(form).appendTo($('div.modal-window.modal-editor.confirm.modal-lg.modal-type-problem'))
 
-    # languages = [
-    #         {name:'c++',mode:'text/x-c++src'},
-    #         {name:'java',mode:'text/x-java'},
-    #         {name:'python',mode:'python'}
-    #        ]
-    # segments = [
-    #       'Statement',
-    #       'Input',
-    #       'Output',
-    #       'Example',
-    #       'Constraints'
-    # ]
+    languages = [
+            {name:'c++',mode:'text/x-c++src'},
+            {name:'java',mode:'text/x-java'},
+            {name:'python',mode:'python'}]
+    segments = [
+          'Statement',
+          'Input',
+          'Output',
+          'Example',
+          'Constraints']
     
-    # render = ->
-    #   probSegs = '<ul>'
+    render = ->
+      probSegs = '<ul>'
       
-    #   for segment in segments
-    #     probSegs += '<li><label>' + segment + '</label> <textarea id="' + segment + '-text"></textarea></li>'
-    #   probSegs += '</ul><button id="goToLangSelect" >Next</button>'
-    #   $('#statement-inputs',popup).html probSegs
-    #   checkboxes = '<ul>'
+      for segment in segments
+        probSegs += '<li><label>' + segment + '</label> <textarea id="' + segment + '-text"></textarea></li>'
+      probSegs += '</ul><button id="goToLangSelect" >Next</button>'
+      $('#statement-inputs',popup).html probSegs
+      checkboxes = '<ul>'
       
-    #   for language in languages
-    #     checkboxes += "<li><label>"+language.name+'</label>
-    #           <input type="checkbox" id="'+language.name+'-select"/>
-    #         </li>';
-    #   checkboxes += '</ul><label>Is code-snippet</label>\
-    #       <input type="checkbox" id="isCodeSnippet"/>
-    #       <button id="backToStatInpt">Back</button>
-    #       <button id="Next-button" style="display:none" >Next</button>
-    #       <button id="Submit-button" style="display:block" >Submit</button>
-    #       '
-    #   $('#language-options',popup).html checkboxes
-    #   finHTML = '<select id="lang-select" ></select>'
-    #   for language in languages
-    #     textboxes = '<textarea id="'+language.name+'-txt1"></textarea>
-    #             <textarea id="'+language.name+'-txt3"></textarea>'
-    #     finHTML += '<div id="'+language.name+'-txt" style="display:none">'+textboxes+'</div>'
-    #   finHTML+='<button id="backToLangSelect">Back</button>
-    #       <button id="finalSubmit">Submit</button>';
-    #   $("#initial-text",popup).html finHTML
+      for language in languages
+        checkboxes += "<li><label>"+language.name+'</label>
+              <input type="checkbox" id="'+language.name+'-select"/>
+            </li>';
+      checkboxes += '</ul><label>Is code-snippet</label>
+          <input type="checkbox" id="isCodeSnippet"/>
+          <button id="backToStatInpt">Back</button>
+          <button id="Next-button" style="display:none" >Next</button>
+          <button id="Submit-button" style="display:block" >Submit</button>
+          '
+      $('#language-options',popup).html checkboxes
+      finHTML = '<select id="lang-select" ></select>'
+      for language in languages
+        textboxes = '<textarea id="'+language.name+'-txt1"></textarea>
+                <textarea id="'+language.name+'-txt3"></textarea>'
+        finHTML += '<div id="'+language.name+'-txt" style="display:none">'+textboxes+'</div>'
+      finHTML+='<button id="backToLangSelect">Back</button>
+          <button id="finalSubmit">Submit</button>';
+      $("#initial-text",popup).html finHTML
     
-    # render()
+    render()
 
-    # hideShow = (hideId,showId)->
-    #   $("##{hideId}",popup).hide()
-    #   $("##{showId}",popup).show()
+    hideShow = (hideId,showId)->
+      $("##{hideId}",popup).hide()
+      $("##{showId}",popup).show()
 
-    # langSelect = ->
-    #   hideShow 'statement-inputs','language-options'
-    # initTextSec = ->
-    #   isFirst = true
-    #   insrtHTML = ''
-    #   for language in languages
-    #     $("##{language.name}-txt",popup).hide()
-    #     if $("##{language.name}-select",popup)[0].checked
-    #       if isFirst
-    #         $("##{language.name}-txt",popup).show()
-    #         isFirst = false
-    #         curLang = language.name+'-txt'
-    #       $("##{language.name}-txt1",popup).show()
-    #       $("##{language.name}-txt3",popup).show()
-    #       insrtHTML += '<option id="'+language.name+'-option" value="'+language.name+'-txt">'+language.name+'</option>'
-    #   $('#lang-select').html insrtHTML
-    #   hideShow 'language-options','initial-text'
-    # switchTextBox = ->
-    #   newLang = $('#lang-select',popup).val()
-    #   hideShow curLang,newLang
-    #   curLang = newLang
+    langSelect = ->
+      hideShow 'statement-inputs','language-options'
+    initTextSec = ->
+      isFirst = true
+      insrtHTML = ''
+      for language in languages
+        $("##{language.name}-txt",popup).hide()
+        if $("##{language.name}-select",popup)[0].checked
+          if isFirst
+            $("##{language.name}-txt",popup).show()
+            isFirst = false
+            curLang = language.name+'-txt'
+          $("##{language.name}-txt1",popup).show()
+          $("##{language.name}-txt3",popup).show()
+          insrtHTML += '<option id="'+language.name+'-option" value="'+language.name+'-txt">'+language.name+'</option>'
+      $('#lang-select').html insrtHTML
+      hideShow 'language-options','initial-text'
+    switchTextBox = ->
+      newLang = $('#lang-select',popup).val()
+      hideShow curLang,newLang
+      curLang = newLang
 
-    # $('#goToLangSelect',popup).click langSelect
+    $('#goToLangSelect',popup).click langSelect
         
-    # $('#isCodeSnippet',popup).click ()->
-    #   if($('#isCodeSnippet',popup)[0].checked)
-    #     hideShow 'Submit-button','Next-button'
-    #   else
-    #     hideShow 'Next-button','Submit-button'
+    $('#isCodeSnippet',popup).click ()->
+      if($('#isCodeSnippet',popup)[0].checked)
+        hideShow 'Submit-button','Next-button'
+      else
+        hideShow 'Next-button','Submit-button'
     
-    # $('#backToStatInpt',popup).click hideShow 'language-options','statement-inputs'
+    $('#backToStatInpt',popup).click hideShow 'language-options','statement-inputs'
     
-    # $('#Next-button',popup).click initTextSec
+    $('#Next-button',popup).click initTextSec
 
-    # $('#Submit-button,finalSubmit',popup).click parse
+    $('#Submit-button,#finalSubmit',popup).click parse
 
-    # $('#backToLangSelect',popup).click hideShow 'initial-text','language-options'
+    $('#backToLangSelect',popup).click hideShow 'initial-text','language-options'
 
-    # $('#lang-select',popup).change switchTextBox
+    $('#lang-select',popup).change switchTextBox
 
-    # parseInput = (s)->
-    #   isMathBlock = false;
-    #   result = '<p>'
-    #   while(s.length>1)
-    #     if(s.charAt(0)=='$'&&s.charAt(1)=='$')
-    #       if(isMathBlock)
-    #         result=result+'$</math>'
-    #         isMathBlock=false
-    #       else
-    #         result=result+'<math>$'
-    #         isMathBlock=true
-    #       s=s.substr(2,s.length-2)
-    #     else if(s.charAt(0)=='\n')
-    #       result=result+'\n</p><p>'
-    #       s=s.substr(1,s.length-1)
-    #     else if(s.charAt(0)==' ')
-    #       result=result+'&#160;'
-    #       s=s.substr(1,s.length-1)
-    #     else
-    #       result=result.concat(s.charAt(0));
-    #       s=s.substr(1,s.length-1)
-    #   if(s.length==1)
-    #     result=result+s;
-    #   return result+'</p>'
+    parseInput = (s)->
+      isMathBlock = false;
+      result = '<p>'
+      while(s.length>1)
+        if(s.charAt(0)=='$'&&s.charAt(1)=='$')
+          if(isMathBlock)
+            result=result+'$</math>'
+            isMathBlock=false
+          else
+            result=result+'<math>$'
+            isMathBlock=true
+          s=s.substr(2,s.length-2)
+        else if(s.charAt(0)=='\n')
+          result=result+'\n</p><p>'
+          s=s.substr(1,s.length-1)
+        else if(s.charAt(0)==' ')
+          result=result+'&#160;'
+          s=s.substr(1,s.length-1)
+        else
+          result=result.concat(s.charAt(0));
+          s=s.substr(1,s.length-1)
+      if(s.length==1)
+        result=result+s;
+      return result+'</p>'
     
-    # parse = ()->
-    #   finXML = '<problem><text>'
-    #   isCodeSnippet= $('#isCodeSnippet',popup).checked
-    #   for segment in segments
-    #     text= $("##{segment}-text").value
-    #     if(text.length>0)
-    #       finXML += '<h1><b>'+segment+'</b></h1> '+parseInput text
-    #   finXML += '</text> <select class="lang-options" style="margin-left:90%">'
-    #   checkedLang=[]
-    #   for language in languages
-    #     if($("##{language.name}-select",popup).checked)
-    #       checkedLang.push(language)
-    #       finXML+='<option value="'+language.mode+'">'+language.name+'</option> '
-    #   finXML+='</select>'
-    #   if(isCodeSnippet)
-    #     finXML+='<div>'
-    #     for language in checkedLang 
-    #       finXML+='<div class="code-snippet code-stub" id="'+language.name+
-    #           '" data-mode="'+language.mode+'" style="background-color:#000"  ><![CDATA['+
-    #           $("##{language.name}-txt1").value+']]></div>'
-    #     finXML += '</div>'
-    #   finXML += '<span></span>
-    #   <coderesponse queuename="cpp-queue">
-    #     <textbox mode="'+checkedLang[0].mode+'" tabsize="4" />
-    #     <codeparam>
-    #       <initial_display><![CDATA[
-    # ]]> </initial_display>
-    #       <grader_payload>
-    # {"problem_name": "Lecture2Problem1"}
-    #     </grader_payload>
-    #     </codeparam>
-    #   </coderesponse>'
-    #   if(isCodeSnippet)
-    #     finXML += '<div id="last-code-stub">'
-    #     for language in checkedLang
-    #       finXML += '<div class="code-snippet code-stub" id="'+language.name+
-    #           '" data-mode="'+language.mode+'" style="background-color:#000"  ><![CDATA['+
-    #           $("##{language.name}-txt3").value+']]></div>'
-    #     finXML+='</div>'
-    #   finXML+='</problem>'
-    #   @xml_editor.setValue finXML
-    #   popup.hide()
+    parse = ()->
+      finXML = '<problem><text>'
+      isCodeSnippet= $('#isCodeSnippet',popup).checked
+      for segment in segments
+        text= $("##{segment}-text").value
+        if(text.length>0)
+          finXML += '<h1><b>'+segment+'</b></h1> '+parseInput text
+      finXML += '</text> <select class="lang-options" style="margin-left:90%">'
+      checkedLang=[]
+      for language in languages
+        if($("##{language.name}-select",popup).checked)
+          checkedLang.push(language)
+          finXML+='<option value="'+language.mode+'">'+language.name+'</option> '
+      finXML+='</select>'
+      if(isCodeSnippet)
+        finXML+='<div>'
+        for language in checkedLang 
+          finXML+='<div class="code-snippet code-stub" id="'+language.name+
+              '" data-mode="'+language.mode+'" style="background-color:#000"  ><![CDATA['+
+              $("##{language.name}-txt1").value+']]></div>'
+        finXML += '</div>'
+      finXML += '<span></span>
+      <coderesponse queuename="cpp-queue">
+        <textbox mode="'+checkedLang[0].mode+'" tabsize="4" />
+        <codeparam>
+          <initial_display><![CDATA[
+    ]]> </initial_display>
+          <grader_payload>
+    {"problem_name": "Lecture2Problem1"}
+        </grader_payload>
+        </codeparam>
+      </coderesponse>'
+      if(isCodeSnippet)
+        finXML += '<div id="last-code-stub">'
+        for language in checkedLang
+          finXML += '<div class="code-snippet code-stub" id="'+language.name+
+              '" data-mode="'+language.mode+'" style="background-color:#000"  ><![CDATA['+
+              $("##{language.name}-txt3").value+']]></div>'
+        finXML+='</div>'
+      finXML+='</problem>'
+      @xml_editor.setValue finXML
+      popup.hide()
             
 
     copy.click () =>
-      popup.find($('button#submit')).click () =>
-        inputs = $(':input, textarea',popup)
-        values = {}
-        inputs.each () ->
-          values[this.name] = $(this).val();
-        @xml_editor.setValue("<b>hi, "+values["age"]+" years old "+values["name"]+", "+values["height"]+" cm Long says "+values["statement"]+"</b>")
-        popup.hide()
-      popup.find($('button#close')).click () ->
-        popup.hide() 
       popup.css {
         'background-color': '#fff';
         'position': 'absolute';
@@ -286,6 +275,7 @@ class @MarkdownEditingDescriptor extends XModule.Descriptor
         'z-index': 1000;
       }
       popup.show()
+      return
 
 
   ###
