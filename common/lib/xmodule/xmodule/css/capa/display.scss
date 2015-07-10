@@ -630,8 +630,8 @@ div.problem {
 
   div.action {
     margin-top: $baseline;
-
-    .save, .check, .show, .reset {
+    //changeBy: edxOnBaadal, added .trial for trial button
+    .save, .check, .trial, .show, .reset {
       height: ($baseline*2);
       vertical-align: middle;
       font-weight: 600;

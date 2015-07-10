@@ -80,27 +80,10 @@ class @MarkdownEditingDescriptor extends XModule.Descriptor
     console.log copy
     copy.find('a').text('Create using form').removeClass('action-save')
     #Create a form
+
     form = 
     '
-      <div id="problem-form" style="background-color:#fff;z-index:1;display:none">
-        whats on your mind??:
-          <textarea type="text" rows="4" cols="50" name="statement">
-          </textarea>
-          Name:
-          <input type="text" name="name"/>
-          Age:
-          <input type="text" name="age"/>
-          Height:
-          <input type="text" name="height"/>
-          <div id = "buttons">
-            <button id="submit">Submit</button>
-            <button id = "close">Close</button>
-          </div>
-      </div>
-    '
-    form = 
-    '
-    <div id="problem-form" call="edit-xblock-modal" style="background-color:#fff;z-index:1;display:none">
+    <div id="problem-form" class="edit-xblock-modal">
       <div class="modal-header"> 
         <h2 class="title modal-window-title">  
           Coding Problem XML generator 
