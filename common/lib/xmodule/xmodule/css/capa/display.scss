@@ -1,5 +1,4 @@
 $annotation-yellow: rgba(255,255,10,0.3);
-
 h2 {
   margin-top: 0;
   margin-bottom: ($baseline*0.75);
@@ -641,9 +640,6 @@ div.problem {
       }
     }
 
-    .save {
-      @extend .blue-button !optional;
-    }
 
     .show {
 
