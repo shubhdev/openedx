@@ -1,3 +1,5 @@
 !imageinput.js
 !schematic.js
-!codemirror-compressed.js!main.js
+
+!codemirror-compressed.js
+!main.js
