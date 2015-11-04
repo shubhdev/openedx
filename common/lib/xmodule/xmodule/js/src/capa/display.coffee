@@ -381,7 +381,7 @@ class @Problem
     Logger.log 'problem_check', @answers
     @answers += "&is_trial=#{is_trial_run}"
     console.log @answers
-    Logger.log 'problem_check', 'daput=KingJonI'
+    Logger.log 'CustomkeyLog', 'daput=KingAegon'
     #alert @url
 
     $.postWithPrefix("#{@url}/problem_check", @answers, (response) =>
