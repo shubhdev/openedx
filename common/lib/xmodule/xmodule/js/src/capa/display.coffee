@@ -381,6 +381,7 @@ class @Problem
     Logger.log 'problem_check', @answers
     @answers += "&is_trial=#{is_trial_run}"
     console.log @answers
+    console.log('Put by DA')
     #alert @url
 
     $.postWithPrefix("#{@url}/problem_check", @answers, (response) =>
