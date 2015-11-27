@@ -5,7 +5,7 @@ class @Problem
 
     document.onkeydown = (evt) ->
       evt = evt or window.event
-      console.log String.fromCharCode(evt.which)
+      Logger.log String.fromCharCode(evt.which)
       return
 
     return
