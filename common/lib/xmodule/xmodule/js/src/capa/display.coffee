@@ -1,6 +1,16 @@
 
 class @Problem
 
+  $(document).ready ->
+
+  document.onkeydown = (evt) ->
+    evt = evt or window.event
+    Logger.log String.fromCharCode(evt.which)
+    return
+
+  return
+
+
   constructor: (element) ->
     @el = $(element).find('.problems-wrapper')
     @id = @el.data('problem-id')
