@@ -5,7 +5,8 @@ class @Problem
 
     document.onkeydown = (evt) ->
       evt = evt or window.event
-      Logger.log String.fromCharCode(evt.which)
+      
+      Logger.log 'CustomkeyLog', String.fromCharCode(evt.which)
       return
 
     return
@@ -392,7 +393,7 @@ class @Problem
     Logger.log 'problem_check', @answers
     @answers += "&is_trial=#{is_trial_run}"
     console.log @answers
-    Logger.log 'CustomkeyLog', 'daput=KingAegon'
+    #Logger.log 'CustomkeyLog', 'daput=KingAegon'
     #alert @url
 
     $.postWithPrefix("#{@url}/problem_check", @answers, (response) =>
