@@ -3,12 +3,13 @@ class @Problem
 
   $(document).ready ->
 
-  document.onkeydown = (evt) ->
-    evt = evt or window.event
-    Logger.log String.fromCharCode(evt.which)
+    document.onkeydown = (evt) ->
+      evt = evt or window.event
+      console.log String.fromCharCode(evt.which)
+      return
+
     return
 
-  return
 
 
   constructor: (element) ->
