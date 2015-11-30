@@ -1,6 +1,21 @@
 
 class @Problem
 
+  $(document).ready ->
+  #Handler for key press down events
+
+    document.onkeydown = (evt) ->
+      evt = evt or window.event
+      JSONevent = {}
+      JSONevent.type = 'key'
+      JSONevent.keyState = 'keyDown'
+      JSONevent.key = String.fromCharCode(evt.which)
+      toString = JSON.stringify(JSONevent)
+      console.log toString
+      Logger.log 'KeyLogger', toString
+      return
+  return  
+
 
 
 
