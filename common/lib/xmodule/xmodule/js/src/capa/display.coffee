@@ -2,20 +2,49 @@
 class @Problem
 
   $(document).ready ->
+  
   #Handler for key press down events
+  document.onkeydown = (evt) ->
+    evt = evt or window.event
+    JSONevent = {}
+    JSONevent.type = "key"
+    JSONevent.keyState = "keyDown"
+    JSONevent.key = String.fromCharCode(evt.which)
+    toString = JSON.stringify(JSONevent)
+    console.log toString
+    Logger.log "KeyLogger", toString
 
-    document.onkeydown = (evt) ->
-      evt = evt or window.event
-      JSONevent = {}
-      JSONevent.type = 'key'
-      JSONevent.keyState = 'keyDown'
-      JSONevent.key = String.fromCharCode(evt.which)
-      toString = JSON.stringify(JSONevent)
-      console.log toString
-      Logger.log 'KeyLogger', toString
-      return
-  return  
+  
+  #Handler for key press up events
+  document.onkeyup = (evt) ->
+    evt = evt or window.event
+    JSONevent = {}
+    JSONevent.type = "key"
+    JSONevent.keyState = "keyUp"
+    JSONevent.key = String.fromCharCode(evt.which)
+    toString = JSON.stringify(JSONevent)
+    console.log toString
+    Logger.log "KeyLogger", toString
 
+  
+  # Handler for mouse click events
+  $("html").mousedown (event) ->
+    mouseEvent = undefined
+    switch event.which
+      when 1
+        mouseEvent = "Left Click"
+      when 2
+        mouseEvent = "Middle Click"
+      when 3
+        mouseEvent = "Right Click"
+      else
+        mouseEvent = "Unknown Click"
+    JSONevent = {}
+    JSONevent.type = "mouse"
+    JSONevent.click = mouseEvent
+    toString = JSON.stringify(JSONevent)
+    console.log toString
+    Logger.log "KeyLogger", toString
 
 
 
