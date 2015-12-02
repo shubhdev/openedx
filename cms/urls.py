@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
+from . import views
 
 # There is a course creators admin table.
 from ratelimitbackend import admin
@@ -16,7 +17,7 @@ LIBRARY_KEY_PATTERN = r'(?P<library_key_string>library-v1:[^/+]+\+[^/+]+)'
 
 urlpatterns = patterns(
     '',
-    url(r'^getlogs$', 'contentstore.views.get_logs', name='get_logs'),
+    url(r'^getlogs/$',views.get_logs, name='get_logs'),
     url(r'^transcripts/upload$', 'contentstore.views.upload_transcripts', name='upload_transcripts'),
     url(r'^transcripts/download$', 'contentstore.views.download_transcripts', name='download_transcripts'),
     url(r'^transcripts/check$', 'contentstore.views.check_transcripts', name='check_transcripts'),

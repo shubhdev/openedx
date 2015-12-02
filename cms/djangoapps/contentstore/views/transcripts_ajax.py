@@ -548,5 +548,3 @@ def _get_item(request, data):
         raise PermissionDenied()
 
     return item
-def get_logs(request):
-    return HttpResponseRedirect('http://www.google.com')
