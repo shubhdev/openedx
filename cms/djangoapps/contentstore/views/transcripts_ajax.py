@@ -11,7 +11,7 @@ import logging
 import json
 import requests
 
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -548,3 +548,5 @@ def _get_item(request, data):
         raise PermissionDenied()
 
     return item
+def get_logs(request):
+    return HttpResponseRedirect('http://www.google.com')
