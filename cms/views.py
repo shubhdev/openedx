@@ -12,26 +12,29 @@ import json
 #Parse the JSON log for KeyLogger data 
 
 
-def parseLogs(filePath):
+def parseLogs(filePath,instiName,courseName,lecture,problem):
 	f=open(filePath,'r')
 	result=''	
 	for line in f:
 		j=json.loads(line)
 		if j['event_type']=='KeyLogger':
-			result+=line
+			jparse=json.loads(j['event']):
+				if(jparse['instiName']==instiName and jparse['courseName']==courseName and jparse['lecture']==lecture and jparse['problem']==problem):
+					result+=line
+			
 	return result
 
-def get_logs(request):
+def get_logs(request,instiName,courseName,lecture,problem):
 	fileDir='/edx/var/log/tracking/'
 	result=''
 	onlyfiles = [f for f in listdir(fileDir) if isfile(join(fileDir, f))]
 	for x in onlyfiles:
 		temp_file=fileDir+x
 		if(x.endswith('.log')):
-			result=result+parseLogs(temp_file)
+			result=result+parseLogs(temp_file,instiName,courseName,lecture,problem)
 		else:
 			os.system('gunzip -c '+temp_file+'> '+fileDir+'temp.log')
-			result=result+parseLogs(fileDir+'temp.log')
+			result=result+parseLogs(fileDir+'temp.log',instiName,courseName,lecture,problem)
 			os.system('rm -f '+fileDir+'temp.log')
 
 	return HttpResponse(result)
