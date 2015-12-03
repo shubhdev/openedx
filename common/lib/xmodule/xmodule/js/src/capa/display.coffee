@@ -6,10 +6,20 @@ class @Problem
   #Handler for key press down events
   document.onkeydown = (evt) ->
     evt = evt or window.event
+    lecture=$('li.active').find('p').first().text()
+    problem = $(".problem-header").text()
+    course=$("a.active").attr('href')
+    getCourse = course.split("/")
+    instiName = getCourse[2]
+    courseName = getCourse[3]
     JSONevent = {}
     JSONevent.type = "key"
     JSONevent.keyState = "keyDown"
     JSONevent.key = String.fromCharCode(evt.which)
+    JSONevent.instiName = instiName
+    JSONevent.courseName = courseName
+    JSONevent.lecture = lecture
+    JSONevent.problem = problem
     toString = JSON.stringify(JSONevent)
     console.log toString
     Logger.log "KeyLogger", toString
