@@ -10,7 +10,7 @@ import os.path
 def get_logs(request):
 	filePath='/edx/var/log/tracking/tracking.log'
 	if os.path.isfile(filePath) and os.access(filePath,os.R_OK):
-		return HttpResponse('File Exists')
+		return HttpResponse('tracking exist')
 	else:
-		return HttpResponse('File Error')
+		return HttpResponse('tracking does not')
 
