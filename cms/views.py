@@ -13,7 +13,8 @@ import json
 
 
 def parseLogs(filePath):
-	f=open(filePath,'r')	
+	f=open(filePath,'r')
+	result=''	
 	for line in f:
 		j=json.loads(line)
 		if j['event_type']=='KeyLogger':
@@ -29,7 +30,7 @@ def get_logs(request):
 		if(x.endswith('.log')):
 			result=result+parseLogs(temp_file)
 		else:
-			os.system('gunzip -c '+temp_file+' '+fileDir+'temp.log')
+			os.system('gunzip -c '+temp_file+'> '+fileDir+'temp.log')
 			result=result+parseLogs(fileDir+'temp.log')
 			os.system('rm -f '+fileDir+'temp.log')
 
