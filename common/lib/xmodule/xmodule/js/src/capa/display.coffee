@@ -6,20 +6,24 @@ class @Problem
   #Handler for key press down events
   document.onkeydown = (evt) ->
     evt = evt or window.event
+  
+    JSONevent = {}
+    JSONevent.type = "key"
+    JSONevent.keyState = "keyDown"
+    JSONevent.key = String.fromCharCode(evt.which)
+
     lecture=$('li.active').find('p').first().text()
     problem = $(".problem-header").text()
     course=$("a.active").attr('href')
     getCourse = course.split("/")
     instiName = getCourse[2]
     courseName = getCourse[3]
-    JSONevent = {}
-    JSONevent.type = "key"
-    JSONevent.keyState = "keyDown"
-    JSONevent.key = String.fromCharCode(evt.which)
     JSONevent.instiName = instiName
     JSONevent.courseName = courseName
-    JSONevent.lecture = lecture
-    JSONevent.problem = problem
+    lectureName = lecture.split(',')
+    JSONevent.lecture = $.trim(lectureName[0])
+    JSONevent.problem = $.trim(problem)
+
     toString = JSON.stringify(JSONevent)
     console.log toString
     Logger.log "KeyLogger", toString
@@ -32,6 +36,20 @@ class @Problem
     JSONevent.type = "key"
     JSONevent.keyState = "keyUp"
     JSONevent.key = String.fromCharCode(evt.which)
+
+    lecture=$('li.active').find('p').first().text()
+    problem = $(".problem-header").text()
+    course=$("a.active").attr('href')
+    getCourse = course.split("/")
+    instiName = getCourse[2]
+    courseName = getCourse[3]
+    JSONevent.instiName = instiName
+    JSONevent.courseName = courseName
+    lectureName = lecture.split(',')
+    JSONevent.lecture = $.trim(lectureName[0])
+    JSONevent.problem = $.trim(problem)
+
+    
     toString = JSON.stringify(JSONevent)
     console.log toString
     Logger.log "KeyLogger", toString
@@ -52,6 +70,20 @@ class @Problem
     JSONevent = {}
     JSONevent.type = "mouse"
     JSONevent.click = mouseEvent
+
+    lecture=$('li.active').find('p').first().text()
+    problem = $(".problem-header").text()
+    course=$("a.active").attr('href')
+    getCourse = course.split("/")
+    instiName = getCourse[2]
+    courseName = getCourse[3]
+    JSONevent.instiName = instiName
+    JSONevent.courseName = courseName
+    lectureName = lecture.split(',')
+    JSONevent.lecture = $.trim(lectureName[0])
+    JSONevent.problem = $.trim(problem)
+
+    
     toString = JSON.stringify(JSONevent)
     console.log toString
     Logger.log "KeyLogger", toString
