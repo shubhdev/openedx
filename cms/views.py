@@ -18,7 +18,7 @@ def parseLogs(filePath,instiName,courseName,lecture,problem):
 	for line in f:
 		j=json.loads(line)
 		if j['event_type']=='KeyLogger':
-			jparse=json.loads(j['event']):
+			jparse=json.loads(j['event'])
 				if(jparse['instiName']==instiName and jparse['courseName']==courseName and jparse['lecture']==lecture and jparse['problem']==problem):
 					result+=line
 			
