@@ -55,7 +55,7 @@ if (xblockInfo.get('graded')) {
                 <% if (xblockInfo.isVertical()) { %>
                     <span class="unit-title item-title">
                         <a href="<%= xblockInfo.get('studio_url') %>"><%= xblockInfo.get('display_name') %></a>
-                    <a href="/getlogs/IITD/MAL201/<%= parentInfo.get('display_name') %>/<%= xblockInfo.get('display_name') %>">Get Logs</a>
+                    <a href="/getlogs/IITD/MAL201/<%= parentInfo.get('display_name') %>/<%= xblockInfo.get('display_name') %>" download>Get Logs</a>
                     </span>
                 <% } else { %>
                     <span class="wrapper-<%= xblockType %>-title wrapper-xblock-field incontext-editor is-editable" data-field="display_name" data-field-display-name="<%= gettext("Display Name") %>">
