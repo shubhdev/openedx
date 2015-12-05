@@ -640,6 +640,7 @@ class CapaMixin(CapaFields):
             'name': self.display_name_with_default,
             'html': html,
             'weight': self.weight,
+            'popUpTime': self.pop_up_problems
         }
 
         context = {
