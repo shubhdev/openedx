@@ -45,7 +45,7 @@ $(document).ready(function(){
 	// Log play/pause events from the player.
 	// Also set the play/pause external control properly.
 	video.on('pause', function () {
-		Logger.log("harvardx.video_embedded_problems", {"video_event": "pause"});
+	
 		console.log('pause');
 		$('#playpauseicon').html('&#8227;');
 		$('#playpauseword').html('Play');
@@ -161,12 +161,12 @@ $(document).ready(function(){
 			if(problemCounter > 1){
 				var newTime = popUpProblemTimer[problemCounter-2].time + 1;
 				ISaidGoTo(newTime);
-				Logger.log('harvardx.video_embedded_problems', {'control_event': 'back_one'});
+				
 				console.log('going back one problem');
 			}else{
 				updateProblemCounter(0);
 				ISaidGoTo(0);
-				Logger.log('harvardx.video_embedded_problems', {'control_event': 'back_one_to_start'});
+				
 				console.log('going back to beginning');
 			}
 		});
@@ -178,13 +178,13 @@ $(document).ready(function(){
 				state.videoPlayer.pause();
 				$('#playpauseicon').html('&#8227;');
 				$('#playpauseword').html('Play');
-				Logger.log('harvardx.video_embedded_problems', {'control_event': 'play'});
+				
 				console.log('play from exterior controls');
 			}else{
 				state.videoPlayer.play();
 				$('#playpauseicon').html('||');
 				$('#playpauseword').html('Pause');
-				Logger.log('harvardx.video_embedded_problems', {'control_event': 'pause'});
+				
 				console.log('pause from exterior controls');
 			}
 		});
@@ -197,14 +197,14 @@ $(document).ready(function(){
 				localStorage[state.id + '-skip'] = 'false';
 				$('#sunmoon').html('&#9788;');
 				$('#onoff').html('Problems are On');
-				Logger.log('harvardx.video_embedded_problems', {'control_event': 'turn_problems_on', 'time': time});
+				
 				console.log('no longer skipping all problems from time ' + time);
 			}else{
 				skipEmAll = true;
 				localStorage[state.id + '-skip'] = 'true';
 				$('#sunmoon').html('&#9790;');
 				$('#onoff').html('Problems are Off');
-				Logger.log('harvardx.video_embedded_problems', {'control_event': 'turn_problems_off', 'time': time});
+			
 				console.log('skipping all problems from time ' + time);
 			}
 		});
@@ -319,7 +319,7 @@ $(document).ready(function(){
 			close: function(){ 
 				state.videoPlayer.play(); 
 				if(includenext){tempDiv.remove();}  // We added it, we should erase it.
-				Logger.log('harvardx.video_embedded_problems', {'unusual_event': 'dialog_closed_unmarked'});
+				
 				console.log('dialog closed');  // Should be pretty rare. I took out the 'close' button.
 			}
 		});
@@ -327,7 +327,7 @@ $(document).ready(function(){
 	
 	// Log the destruction of the dialog and play the video if there are no more dialogs up.
 	function dialogDestroyed(message){
-		Logger.log('harvardx.video_embedded_problems', {'control_event': message});
+		
 		console.log(message);
 		$('input.check.Check').removeAttr('style');  // un-blue the check button.
 		problemsBeingShown--;
@@ -404,7 +404,7 @@ $(document).ready(function(){
 
 <style>
 
-/* This styles the pop up question that appears during videos */
+/* This styles the pop up question that appears during videos  */
 .ui-widget-overlay {
    background: #666;
    opacity: .30;
