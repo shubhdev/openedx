@@ -208,6 +208,14 @@ class CapaFields(object):
              "or to report and issue, please contact moocsupport@mathworks.com",
         scope=Scope.settings
     )
+    pop_up_problems = String(
+        display_name="Pop Up problems during videos",
+        help="problems pop up during videos",
+            
+        scope=Scope.settings
+    )
+
+
 
 
 class CapaMixin(CapaFields):
