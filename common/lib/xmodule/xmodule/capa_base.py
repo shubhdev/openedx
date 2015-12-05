@@ -208,9 +208,15 @@ class CapaFields(object):
              "or to report and issue, please contact moocsupport@mathworks.com",
         scope=Scope.settings
     )
-    pop_up_problems = String(
-        display_name="Pop Up problems during videos",
-        help="problems pop up during videos",
+    display_time= String(
+        display_name="Time (in seconds) at which the question pops up",
+        help="This is the time when the problem will pop up for the student to answer. If he successfully answers the question then the video will be moved to the seek time provided",
+            
+        scope=Scope.settings
+    )
+    seek_time= String(
+        display_name="Time (in seconds) at which video is seeked to on success",
+        help="This is the time to which the video is seeked to on successfully answering the question. Giving a wrong answer will continue the video without seeking",
             
         scope=Scope.settings
     )
@@ -640,7 +646,8 @@ class CapaMixin(CapaFields):
             'name': self.display_name_with_default,
             'html': html,
             'weight': self.weight,
-            'popUpTime': self.pop_up_problems
+            'display_time': self.display_time,
+            'seek_time': self.seek_time
         }
 
         context = {
