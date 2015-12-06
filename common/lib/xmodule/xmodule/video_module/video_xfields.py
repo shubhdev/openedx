@@ -184,7 +184,7 @@ class VideoFields(LicenseMixin):
         default=False,
     )
     video_links= String(
-        help=_("Enter a comma separated list of link display time(in seconds),title and link. Individual links should be separated by a semicolon e.g. 30,Quantum Physics Wikipedia,https://en.wikipedia.org/wiki/Quantum_mechanics;45,Gravitation Wikipedia,https://en.wikipedia.org/wiki/Gravity"),  # pylint: disable=line-too-long
+        help=_("Enter a comma separated list of link display time(hh:mm:ss),title and link. Individual links should be separated by a semicolon e.g. 30,Quantum Physics Wikipedia,https://en.wikipedia.org/wiki/Quantum_mechanics;6:16,Gravitation Wikipedia,https://en.wikipedia.org/wiki/Gravity"),  # pylint: disable=line-too-long
         display_name=_("Video Links"),
         scope=Scope.settings,
         default="",
