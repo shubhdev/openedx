@@ -280,6 +280,7 @@ class VideoModule(VideoFields, VideoTranscriptsMixin, VideoStudentViewHandlers, 
             'end': self.end_time.total_seconds(),
             'transcriptLanguage': transcript_language,
             'transcriptLanguages': sorted_languages,
+            'videoLinks': self.video_links,
 
             # TODO: Later on the value 1500 should be taken from some global
             # configuration setting field.
