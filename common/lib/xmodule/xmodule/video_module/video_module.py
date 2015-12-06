@@ -280,7 +280,7 @@ class VideoModule(VideoFields, VideoTranscriptsMixin, VideoStudentViewHandlers, 
             'end': self.end_time.total_seconds(),
             'transcriptLanguage': transcript_language,
             'transcriptLanguages': sorted_languages,
-            'videoLinks': self.video_links,
+            
 
             # TODO: Later on the value 1500 should be taken from some global
             # configuration setting field.
@@ -326,6 +326,7 @@ class VideoModule(VideoFields, VideoTranscriptsMixin, VideoStudentViewHandlers, 
             'transcript_download_format': transcript_download_format,
             'transcript_download_formats_list': self.descriptor.fields['transcript_download_format'].values,
             'license': getattr(self, "license", None),
+            'videoLinks': self.video_links
         }
         return self.system.render_template('video.html', context)
 
