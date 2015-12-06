@@ -145,14 +145,44 @@ var HXpopUpOptions =
 <script>
 
 // Adds the problem pop up during video functionality
-$(document).ready(function(){
+$(window).load(function(){
 
-  var popUpProblemTimer = 
+
+
+function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+var popUpTimingsInfo=$('#popUpTimingsInfo').html();
+var timingArray=popUpTimingsInfo.split("#");
+
+/*  var popUpProblemTimer = 
 [
   {time: "15", title: "BVS",next:"45"}
 
 ];
+*/
+
+var popUpProblemTimer=[];
+//console.log('Lenght='+popUpProblemTimer.length); 
+ 
+
+
+for(var i=0;i<timingArray.length-1;i++)
+{
+
+
   
+  popUpProblemTimer.push(JSON.parse(timingArray[i]));
+
+
+}
+
   
   // Declaring semi-global variables for later use.
   var video = $('.video');

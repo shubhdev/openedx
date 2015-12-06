@@ -14,6 +14,21 @@
   ${ problem['name'] }
 </h2>
 
+<script>
+    
+
+    var probName="${ problem['name'] }";
+    var display_time="${ problem['display_time'] }";
+    var seek_time="${ problem['seek_time'] }";
+    var time_json={};
+    time_json.title=probName;
+    time_json.time=display_time;
+    time_json.next=seek_time;
+    $("#popUpTimingsInfo").append(JSON.stringify(time_json)+'#');
+</script>
+
+
+
 <div class="problem-progress"></div>
 
 <div class="problem">
