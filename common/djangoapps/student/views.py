@@ -1305,7 +1305,7 @@ def _do_create_account(form):
     user = User(
         username=form.cleaned_data["username"],
         email=form.cleaned_data["email"],
-        is_active=False
+        is_active=True
     )
     user.set_password(form.cleaned_data["password"])
     registration = Registration()
